@@ -1,6 +1,6 @@
 module.exports = {
   title: '测不准的博客',
-  description: '随便写写，欢迎指正',
+  description: '日常记录，欢迎指正',
   base: '/day-blog/dist/',
   // head: [
   //   [
@@ -12,7 +12,7 @@ module.exports = {
   //   ]
   // ],
   themeConfig: {
-    repo: 'vuejs/vitepress',
+    repo: 'Bluestar123/day-blog/tree/master',
     // 头部导航
     nav: [
       {text: '首页', link: '/'},
