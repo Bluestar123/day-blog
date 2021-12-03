@@ -1,8 +1,7 @@
 module.exports = {
   title: '测不准的博客',
   description: '随便写写，欢迎指正',
-  base: './',
-  dest: 'dist',
+  base: '/day-blog/dist/',
   // head: [
   //   [
   //     'link',
