@@ -2,15 +2,15 @@ module.exports = {
   title: '测不准的博客',
   description: '学习记录，欢迎指正',
   base: '/day-blog/dist/',
-  // head: [
-  //   [
-  //     'link',
-  //     {
-  //       rel: 'icon',
-  //       href: '/img', // 图片放在 public 文件夹下
-  //     }
-  //   ]
-  // ],
+  head: [
+    [
+      'link',
+      {
+        rel: 'stylesheet',
+        href: '/css/index.css', // 图片放在 public 文件夹下
+      }
+    ]
+  ],
   themeConfig: {
     repo: 'Bluestar123/day-blog/tree/master',
     // 头部导航
@@ -29,6 +29,16 @@ module.exports = {
     // sidebar: [
     //   {text: '我的', link: '/mine/'},
     // ]
+  },
+  markdown: {
+    config: (md) => {
+      const {
+        demoBlockPlugin
+      } = require('../../demoblock')//require('vitepress-theme-demoblock')
+      md.use(demoBlockPlugin, {
+        lang: ['js', 'ts', 'vue', 'css']
+      })
+    }
   }
 }
 
