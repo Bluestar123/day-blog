@@ -1,6 +1,6 @@
 module.exports = {
   title: '测不准的博客',
-  description: '日常记录，欢迎指正',
+  description: '学习记录，欢迎指正',
   base: '/day-blog/dist/',
   // head: [
   //   [
@@ -17,14 +17,66 @@ module.exports = {
     nav: [
       {text: '首页', link: '/'},
       {text: '关于', link: '/about/'},
-      {text: '前端框架', items: [
-        { text: 'Chinese', link: '/language/chinese/' },
+      {text: '前端技术', items: [
+        { text: 'TS', link: '/ts/basics', activeMatch: '^/ts/' },
         { text: 'Japanese', link: '/language/japanese/' }
       ]}
     ],
     // 侧边导航
-    sidebar: [
-      {text: '我的', link: '/mine/'}
-    ]
+    sidebar: {
+      '/ts/': getTsSidebar()
+    }
+    // sidebar: [
+    //   {text: '我的', link: '/mine/'},
+    // ]
   }
+}
+
+
+// ts 侧边栏
+function getTsSidebar() {
+  return [
+    {
+      text: '基础知识',
+      children: [
+        { text: '基础', link: '/ts/basics' },
+        { text: '内置类型', link: '/ts/inside-type' },
+      ]
+    },
+    {
+      text: '日常总结',
+      link: '/ts/daily'
+      // children: [
+      //   { text: '基础', link: '/ts/daily' }
+      // ]
+    },
+    {
+      text: '练习题',
+      children: [
+        {
+          text: '字符串',
+          // link: '/ts/tests/string',
+          // activeMatch: '^/ts/tests',
+          children: [
+            {
+              text: '字符串练习题',
+              link: '/ts/tests/string',
+            },
+            {
+              text: '答案',
+              link: '/ts/tests/string-answer',
+            }
+          ]
+        }
+      ]
+    },
+    {
+      text: '日常总结',
+      children: [
+        { text: 'Homepage', link: '/config/homepage' },
+        { text: 'Algolia Search', link: '/config/algolia-search' },
+        { text: 'Carbon Ads', link: '/config/carbon-ads' }
+      ]
+    }
+  ]
 }

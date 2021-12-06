@@ -5,18 +5,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vitepress dev docs --open",
+    "dev": "npm run register:components && vitepress dev docs --open",
     "prebuild": "node src/clearDist.js",
-    "build": "vitepress build docs",
+    "build": "npm run register:components && vitepress build docs",
     "postbuild": "node src/mvDist.js",
     "serve": "vitepress serve docs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "register:components": "vitepress-rc"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "node-copydir": "^1.0.1",
-    "vitepress": "^0.20.1"
+    "vitepress": "^0.20.1",
+    "vitepress-theme-demoblock": "^1.4.2"
   }
 }
