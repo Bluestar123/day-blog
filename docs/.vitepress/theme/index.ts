@@ -3,7 +3,7 @@ import Theme from 'vitepress/dist/client/theme-default'
 
 // 导入主题样式
 import 'vitepress-theme-demoblock/theme/styles/index.css'
-import '../public/css/index.css'
+import '/public/css/index.css'
 // 导入插件的主题
 import { registerComponents } from './register-components.js'
 

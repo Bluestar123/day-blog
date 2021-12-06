@@ -1,0 +1,1 @@
+import{_ as t,c as e,o as s,a}from"./app.57818325.js";const u='{"title":"","description":"","frontmatter":{},"relativePath":"ts/tests/string-answer.md","lastUpdated":1638539525457}',r={},n=a("p",null,"adf",-1),o=[n];function c(_,p,d,i,l,f){return s(),e("div",null,o)}var h=t(r,[["render",c]]);export{u as __pageData,h as default};
