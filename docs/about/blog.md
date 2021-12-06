@@ -162,14 +162,14 @@ function getTsSidebar() {
 :::
 
 
-## 部署 github page
+## 部署 github pages
 1. 在 `docs/.vitepress/config.js` 中设置正确的base。
 - 如果要部署到 `https://<USERNAME>.github.io/`，则可以省略 `base`，因为它默认为 `“/”`。
 - 如果您正在部署到 `https://<USERNAME>.github.io/<REPO>/`，例如，您的存储库位于 `github.com/<REPO>/`，然后将 `base` 设置为 `/<REPO>/`
 
 
 ::: tip
-vitepress 默认打包后的 dist 目录放在 .vitepress/dist/ 下，小编这里只是设置了 github page（读者可自行百度查找），写了个脚本把打包完后的 dist 目录移到了根目录下，git push 到仓库中，直接通过 github 地址访问，仅供参考。
+vitepress 默认打包后的 dist 目录放在 .vitepress/dist/ 下，小编这里只是设置了 github pages（读者可自行百度查找），写了个脚本把打包完后的 dist 目录移到了根目录下，git push 到仓库中，直接通过 github 地址访问，仅供参考。
 :::
 
 
