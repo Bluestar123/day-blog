@@ -1,3 +1,5 @@
+const { getTsSidebar, getAboutSidebar, getBrowserSidebar, getReactSidebar } = require('./sidebar')
+
 module.exports = {
   title: '测不准的博客',
   description: '学习记录，欢迎指正',
@@ -19,13 +21,18 @@ module.exports = {
       {text: '关于', link: '/about/blog', activeMatch: '^/about/'},
       {text: '前端技术', items: [
         { text: 'TS', link: '/ts/basics', activeMatch: '^/ts/' },
-        { text: 'Vue', link: '/vue/basics' }
+        { text: 'React', link: '/react/ts', activeMatch: '^/react/' }
+      ]},
+      {text: '前端相关', items: [
+        { text: '浏览器', link: '/browser/index', activeMatch: '^/browser/' },
       ]}
     ],
     // 侧边导航
     sidebar: {
       '/ts/': getTsSidebar(),
-      '/about': getAboutSidebar()
+      '/about': getAboutSidebar(),
+      '/browser': getBrowserSidebar(),
+      '/react': getReactSidebar()
     }
     // sidebar: [
     //   {text: '我的', link: '/mine/'},
@@ -37,75 +44,10 @@ module.exports = {
         demoBlockPlugin
       } = require('../../demoblock')//require('vitepress-theme-demoblock')
       md.use(demoBlockPlugin, {
-        lang: ['js', 'ts', 'vue', 'css', 'shell', 'json']
+        lang: ['js', 'ts', 'vue', 'css', 'shell', 'json', 'tsx']
       })
     }
   }
 }
 
 
-// ts 侧边栏
-function getTsSidebar() {
-  return [
-    {
-      text: '基础知识',
-      children: [
-        { text: '基础', link: '/ts/basics' },
-        { text: '内置类型', link: '/ts/inside-type' },
-      ]
-    },
-    {
-      text: '日常总结',
-      link: '/ts/daily'
-      // children: [
-      //   { text: '基础', link: '/ts/daily' }
-      // ]
-    },
-    {
-      text: '练习题',
-      children: [
-        {
-          text: '字符串',
-          // link: '/ts/tests/string',
-          // activeMatch: '^/ts/tests',
-          children: [
-            {
-              text: '字符串练习题',
-              link: '/ts/tests/string',
-            },
-            {
-              text: '答案',
-              link: '/ts/tests/string-answer',
-            }
-          ]
-        }
-      ]
-    },
-    {
-      text: '日常总结',
-      children: [
-        { text: 'Homepage', link: '/config/homepage' },
-        { text: 'Algolia Search', link: '/config/algolia-search' },
-        { text: 'Carbon Ads', link: '/config/carbon-ads' }
-      ]
-    }
-  ]
-}
-
-// 关于侧边栏
-function getAboutSidebar() {
-  return [
-    {
-      text: '博客搭建',
-      link: '/about/blog'
-      // children: [
-      //   { text: '基础', link: '/ts/basics' },
-      //   { text: '内置类型', link: '/ts/inside-type' },
-      // ]
-    },
-    {
-      text: '关于作者',
-      link: '/about/author'
-    },
-  ]
-}
