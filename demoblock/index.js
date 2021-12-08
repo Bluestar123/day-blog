@@ -1,5 +1,8 @@
 const mdContainer = require('markdown-it-container')
 const { highlight } = require('./highlight')
+const langList = ['js', 'ts', 'vue', 'css', 'shell', 'json', 'tsx']
+
+const showDemoLang = ['vue']
 
 const blockPlugin = md => {
   md.use(mdContainer, 'demo', {
@@ -10,9 +13,10 @@ const blockPlugin = md => {
       // const m = tokens[idx].info.trim().match(/^demo\s*(.*)$/)
       if (tokens[idx].nesting === 1) {
         // const description = m && m.length > 1 ? m[1] : ''
+        const lang = tokens[idx + 1].info
         const content = tokens[idx + 1].type === 'fence' ? tokens[idx + 1].content : ''
         return `<demo sourceCode="${md.utils.escapeHtml(content)}">${
-          content ? `<!--vue-demo:${content}:vue-demo-->` : ''
+          showDemoLang.includes(lang) && content ? `<!--vue-demo:${content}:vue-demo-->` : ''
         }`
       }
       return '</demo>'
@@ -31,6 +35,7 @@ const codePlugin = (md, options) => {
       prevToken && prevToken.nesting === 1 && prevToken.info.trim().match(/^demo\s*(.*)$/)
     if (lang.includes(token.info.trim()) && isInDemoContainer) {
       let temp_lang = token.info.trim()
+
       const m = prevToken.info.trim().match(/^demo\s*(.*)$/)
       const description = m && m.length > 1 ? m[1] : ''
       // md.render(description).html
@@ -78,7 +83,10 @@ const demoBlockPlugin = (md, options = {}) => {
   md.use(renderPlugin, options)
 }
 
+
+
 module.exports = {
+  langList,
   blockPlugin,
   codePlugin,
   renderPlugin,

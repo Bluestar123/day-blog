@@ -29,18 +29,22 @@ export function getTsSidebar() {
       children: [
         {
           text: '字符串',
-          // link: '/ts/tests/string',
+          link: '/ts/tests/string',
           // activeMatch: '^/ts/tests',
-          children: [
-            {
-              text: '字符串练习题',
-              link: '/ts/tests/string',
-            },
-            {
-              text: '答案',
-              link: '/ts/tests/string-answer',
-            }
-          ]
+          // children: [
+          //   {
+          //     text: '字符串练习题',
+          //     link: '/ts/tests/string',
+          //   },
+          //   {
+          //     text: '答案',
+          //     link: '/ts/tests/string-answer',
+          //   }
+          // ]
+        },
+        {
+          text: '元组',
+          link: '/ts/tests/tuple'
         }
       ]
     },

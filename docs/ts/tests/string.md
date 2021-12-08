@@ -6,6 +6,13 @@ type a2 = CapitalizeString<'parent'>        // Parent
 type a3 = CapitalizeString<233>             // 233
 ```
 
+:::demo 使用模板字符串类型，`L` 表示第一个字符，`R` 表示剩下的字符串
+
+```ts
+type CapitalizeString<T> = T extends `${infer L}${infer R}` ? `${Uppercase<L>}${R}` : T
+```
+:::
+
 ## FirstChar
 获取字符串字面量中的第一个字符
 ```ts
@@ -13,6 +20,13 @@ type A = FirstChar<'BFE'> // 'B'
 type B = FirstChar<'dev'> // 'd'
 type C = FirstChar<''> // never
 ```
+:::demo 使用模板字符串类型，`L` 表示第一个字符，`R` 表示剩下的字符串
+
+```ts
+type FirstChar<T> = T extends `${infer L}${infer R}` ? L : never
+```
+:::
+
 
 ## LastChar
 获取字符串字面量中的最后一个字符
@@ -21,6 +35,18 @@ type A = LastChar<'BFE'> // 'E'
 type B = LastChar<'dev'> // 'v'
 type C = LastChar<''> // never
 ```
+:::demo 使用模板字符串类型，`L` 表示第一个字符，`R` 表示剩下的字符串，递归处理，直到 `R` 为空串或者 `T` 不满足 `${infer L}${infer R}` 为止
+
+```ts
+type LastChar<T> = T extends `${infer L}${infer R}` ? R extends '' ? L : LastChar<R> : never
+
+type LastChar<T, S = never> = T extends `${infer L}${infer R}` ? LastChar<R, L> : S
+// 注意
+type a = '' extends `${infer L}${infer R}` ? 1 : 2  // 2
+```
+:::
+
+
 
 ## StringToTuple
 字符串转换为元组类型
@@ -28,6 +54,13 @@ type C = LastChar<''> // never
 type A = StringToTuple<'BFE.dev'> // ['B', 'F', 'E', '.', 'd', 'e','v']
 type B = StringToTuple<''> // []
 ```
+
+:::demo 使用模板字符串类型，`L` 表示第一个字符，`R` 表示剩下的字符串
+
+```ts
+type StringToTuple<T, S extends any[] = []> = T extends `${infer L}${infer R}` ? StringToTuple<R, [...S, L]> : S
+```
+:::
 
 ## TupleToString
 将字符串类型的元素转换为字符串字面量类型
@@ -183,119 +216,4 @@ console.log(<Comp name="" age={1} flag/>)           // 正确
 console.log(<Comp name="" age={1} flag id="111"/>)  // 正确
 // console.log(<Comp name={1} age={1} flag/>)          // 错误，name为字符串类型
 // console.log(<Comp age={1} flag/>)                   // 错误，缺少必须属性name:string
-```
-
-
-
-## LengthOfTuple
-计算元组类型的长度
-```ts
-type A = LengthOfTuple<['B', 'F', 'E']> // 3
-type B = LengthOfTuple<[]> // 0
-```
-
-## FirstItem
-得到元组类型中的第一个元素
-```ts
-type A = FirstItem<[string, number, boolean]> // string
-type B = FirstItem<['B', 'F', 'E']> // 'B'
-```
-
-
-## LastItem
-得到元组类型中的最后一个元素
-```ts
-type A = LastItem<[string, number, boolean]> // boolean
-type B = LastItem<['B', 'F', 'E']> // 'E'
-type C = LastItem<[]> // never
-```
-
-
-## Shift
-移除元组类型中的第一个类型
-```ts
-type A = Shift<[1, 2, 3]> // [2,3]
-type B = Shift<[1]> // []
-type C = Shift<[]> // []
-```
-
-## Push
-在元组类型T中添加新的类型I
-```ts
-type A = Push<[1,2,3], 4> // [1,2,3,4]
-type B = Push<[1], 2> // [1, 2]
-```
-
-## ReverseTuple
-反转元组
-```ts
-type A = ReverseTuple<[string, number, boolean]> // [boolean, number, string]
-type B = ReverseTuple<[1, 2, 3]> // [3,2,1]
-type C = ReverseTuple<[]> // []
-```
-
-## Flat
-拍平元组
-```ts
-type A = Flat<[1, 2, 3]> // [1,2,3]
-type B = Flat<[1, [2, 3], [4, [5, [6]]]]> // [1,2,3,4,5,6]
-type C = Flat<[]> // []
-type D = Flat<[1]> // [1]
-```
-
-## Repeat<T,C>
-复制类型T为C个元素的元组类型
-```ts
-type A = Repeat<number, 3> // [number, number, number]
-type B = Repeat<string, 2> // [string, string]
-type C = Repeat<1, 1> // [1]
-type D = Repeat<0, 0> // []
-```
-
-## Filter<T,A>
-保留元组类型T中的A类型
-```ts
-type A = Filter<[1,'BFE', 2, true, 'dev'], number> // [1, 2]
-type B = Filter<[1,'BFE', 2, true, 'dev'], string> // ['BFE', 'dev']
-type C = Filter<[1,'BFE', 2, any, 'dev'], string> // ['BFE', any, 'dev']
-```
-
-## FindIndex<T,E>
-找出E类型在元组类型T中的下标
-```ts
-type A = [any, never, 1, '2', true]
-type B = FindIndex<A, 1> // 2
-type C = FindIndex<A, 3> // never
-```
-
-## TupleToEnum
-元组类型转换为枚举类型
-```ts
-// 默认情况下，枚举对象中的值就是元素中某个类型的字面量类型
-type a1 = TupleToEnum<["MacOS", "Windows", "Linux"]>
-// -> { readonly MacOS: "MacOS", readonly Windows: "Windows", readonly Linux: "Linux" }
-
-// 如果传递了第二个参数为true，则枚举对象中值的类型就是元素类型中某个元素在元组中的index索引，也就是数字字面量类型
-type a2 = TupleToEnum<["MacOS", "Windows", "Linux"], true>
-// -> { readonly MacOS: 0, readonly Windows: 1, readonly Linux: 2 }
-```
-
-## Slice
-截取元组中的部分元素
-```ts
-type A1 = Slice<[any, never, 1, '2', true, boolean], 0, 2>          // [any,never,1]                    从第0个位置开始，保留到第2个位置的元素类型
-type A2 = Slice<[any, never, 1, '2', true, boolean], 1, 3>          // [never,1,'2']                    从第1个位置开始，保留到第3个位置的元素类型
-type A3 = Slice<[any, never, 1, '2', true, boolean], 1, 2>          // [never,1]                        从第1个位置开始，保留到第2个位置的元素类型
-type A4 = Slice<[any, never, 1, '2', true, boolean], 2>             // [1,'2',true,boolean]             从第2个位置开始，保留后面所有元素类型
-type A5 = Slice<[any], 2>                                           // []                               从第2个位置开始，保留后面所有元素类型
-type A6 = Slice<[], 0>                                              // []
-```
-
-## Splice
-删除并且替换部分元素
-```ts
-type A1 = Splice<[string, number, boolean, null, undefined, never], 0, 2>                   // [boolean,null,undefined,never]               从第0开始删除，删除2个元素
-type A2 = Splice<[string, number, boolean, null, undefined, never], 1, 3>                   // [string,undefined,never]                     从第1开始删除，删除3个元素
-type A3 = Splice<[string, number, boolean, null, undefined, never], 1, 2, [1, 2, 3]>        // [string,1,2,3,null,undefined,never]          从第1开始删除，删除2个元素，替换为另外三个元素1,2,3
-
 ```

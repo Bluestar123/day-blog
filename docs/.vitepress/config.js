@@ -1,5 +1,4 @@
 const { getTsSidebar, getAboutSidebar, getBrowserSidebar, getReactSidebar } = require('./sidebar')
-
 module.exports = {
   title: '测不准的博客',
   description: '学习记录，欢迎指正',
@@ -41,10 +40,11 @@ module.exports = {
   markdown: {
     config: (md) => {
       const {
+        langList,
         demoBlockPlugin
       } = require('../../demoblock')//require('vitepress-theme-demoblock')
       md.use(demoBlockPlugin, {
-        lang: ['js', 'ts', 'vue', 'css', 'shell', 'json', 'tsx']
+        lang: langList
       })
     }
   }

@@ -88,7 +88,7 @@ type a = any extends number ? 1 : 2  // 1 | 2
 type aa = [any] extends [number] ? 1 : 2  // 1
 ```
 
-## Equal 判断两个元素是否一样
+## Equal 判断两个元素是否一样   [] 包住 为了避免分发
 ```ts
 // 判断两个元素是否一样
 type Equal<T, K> = [T] extends [K] ? [K] extends [T] ? (
@@ -125,4 +125,30 @@ any extends never ? 1 | 2 => 1 | 2
 
 type isTrue<T> = T extends true ? 1 : 2
 isTrue<Boolean> 会分发
+```
+
+## 获取值的类型的联合
+就是 T[number], T[keyof T]这种为啥可以拿到对象的所有的值的类型的联合?
+```ts
+比如T = {name:string, age:number}，那么 T["name"]= string很好理解对吧
+
+那么T["name"|"age"] = string|number 应该也很容易理解
+
+那么 T[keyof T]= T对象所有值的类型的联合，是不是也很容易理解了
+
+元组所有的key都是数字，那么元组T[number] 可以得到元组所有值的类型是不是也很容易理解了
+
+
+必须是泛型，联合
+1|"2" extends number ? true|false 才能得到boolean
+```
+
+
+
+## 数字，字符串和布尔值是对象
+在js中，所有类型都是对象类型
+```ts
+let a:{} = 1
+
+type a = 1 extends {} ? 1 : 2   // 1
 ```
