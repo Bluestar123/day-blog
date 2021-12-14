@@ -1,0 +1,1 @@
+import{_ as e,c as t,o as a,a as s}from"./app.3788c916.js";const m='{"title":"","description":"","frontmatter":{},"relativePath":"gulp/index.md","lastUpdated":1639013562925}',o={},n=s("p",null,"sasdf",-1),c=[n];function r(d,p,_,i,l,f){return a(),t("div",null,c)}var x=e(o,[["render",r]]);export{m as __pageData,x as default};

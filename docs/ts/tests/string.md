@@ -70,12 +70,32 @@ type B = TupleToString<[]>              // ''
 type C = TupleToString<['a']>           // 'a'
 ```
 
+:::demo 使用模板字符串类型，`L` 表示元组第一个字符，`R` 表示剩下的字符串数组，类似 `...rest`
+
+```ts
+type TupleToString<T, S extends string = ''> = T extends [infer L, ...infer R] ? (
+   L extends string ? TupleToString<R, `${S}${L}`> : never
+) : S
+```
+:::
+
+
 ## RepeatString<T,C>
 复制字符T为字符串类型，长度为C
 ```ts
 type A = RepeatString<'a', 3> // 'aaa'
 type B = RepeatString<'a', 0> // ''
 ```
+
+:::demo 使用数组做判断的通常使用元组形式，用长度判断
+
+```ts
+type RepeatString<T, K, A extends any[] = [], S extends string = ''> = A['length'] extends K ? S : (
+    RepeatString<T, K, [...A, 1], `${S}${T}`>
+)
+```
+:::
+
 
 ## SplitString
 将字符串字面量类型按照指定字符，分割为元组。无法分割则返回原字符串字面量
@@ -87,12 +107,27 @@ type A4 = SplitString<'open.flag', '.'>               // ["open", "flag"]
 type A5 = SplitString<'open.flag', '-'>               // ["open.flag"]
 ```
 
+:::demo 以 `K` 为分隔符，`L` 为前面字符，`R` 为后面字符
+
+```ts
+type SplitString<T, K, S extends any[] = []> = T extends `${infer L}${K}${infer R}` ? SplitString<R, K, [...S, L]> : [...S, T]
+```
+:::
+
+
 ## LengthOfString
 计算字符串字面量类型的长度
 ```ts
 type A = LengthOfString<'BFE.dev'> // 7
 type B = LengthOfString<''> // 0
 ```
+
+:::demo 以元组形式判断长度
+
+```ts
+type LengthOfString<T, S extends any[] = []> = T extends `${infer L}${infer R}` ? LengthOfString<R, [...S, L]> : S['length']
+```
+:::
 
 ## KebabCase
 驼峰命名转横杠命名
@@ -101,12 +136,30 @@ type a1 = KebabCase<'HandleOpenFlag'>           // handle-open-flag
 type a2 = KebabCase<'OpenFlag'>                 // open-flag
 ```
 
+:::demo 从左到右遍历，遇到大写字母则转换为 `-` + 小写字符
+
+```ts
+type RemoveFirstChar<T> = T extends `-${infer L}` ? L : T
+type KebabCase<T, S extends string = ''> = T extends `${infer L}${infer R}` (
+    L extends Uppercase<L> ? KebabCase<R, `${S}-${Lowercase<L>}`> : KebabCase<R, `${S}${L}`>
+) ? : RemoveFirstChar<S>
+```
+:::
+
 ## CamelCase
 横杠命名转化为驼峰命名
 ```ts
 type a1 = CamelCase<'handle-open-flag'>         // HandleOpenFlag
 type a2 = CamelCase<'open-flag'>                // OpenFlag
 ```
+
+:::demo 从左到右遍历，遇到 `-` + 小写字母则转换为大写字符
+
+```ts
+type CapitalizeString<T> = T extends `${infer L}${infer R}` ? `${Uppercase<L>}${R}` : T
+type CamelCase<T, S extends string = ''> = T extends `${infer L}-${infer R}` ? CamelCase<R, `${S}${CapitalizeString<L>}`> : `${S}${CapitalizeString<T>}`
+```
+:::
 
 ## ObjectAccessPaths
 得到对象中的值访问字符串
@@ -161,6 +214,22 @@ i18n('home.bottomBar.notes')        // correct
 // i18n('home.login.abc')              // error，不存在的属性
 // i18n('home.topBar')                 // error，没有到最后一个属性
 ```
+
+:::demo 如果是对象拼接 `K`, 判断对象 `Record<string, any>`
+
+```ts
+type RemoveFirstChar<T> = T extends `.${infer L}` ? L : T
+type ObjectAccessPaths<T, S extends string = '', K extends keyof T> =
+    K extends keyof T ?
+        K extends string ?
+            T[K] extends Record<string, any> ?
+                (ObjectAccessPaths<T[K], `${S}.${K}`>) : RemoveFirstChar<`${S}.${K}`> :
+            never :
+        never
+
+```
+:::
+
 
 ## ComponentEmitsType
 
@@ -217,3 +286,19 @@ console.log(<Comp name="" age={1} flag id="111"/>)  // 正确
 // console.log(<Comp name={1} age={1} flag/>)          // 错误，name为字符串类型
 // console.log(<Comp age={1} flag/>)                   // 错误，缺少必须属性name:string
 ```
+
+
+:::demo 如果是对象拼接 `K`, 判断对象 `Record<string, any>`
+
+```ts
+// 转为驼峰
+type CamelCase<T extends string = '', S extends string = ''> = T extends `${infer L}-${infer R1}${infer R2}` ? `${
+    CamelCase<R2, `${S}${L}${Uppercase<R1>}`>
+  }`: Capitalize<`${S}${T}`>
+
+type ComponentEmitsType<T> = {
+    [K in keyof T as `on${K extends string ? CamelCase<K> : never}`]: T[K] extends (...args: infer P) => any ? (...args:P) => void : T[K]
+}
+
+```
+:::

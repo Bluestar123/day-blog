@@ -88,3 +88,27 @@ export function getReactSidebar() {
     }
   ]
 }
+
+/**
+ * Gulp 侧边栏
+ */
+ export function getGulpSidebar() {
+  return [
+    {
+      text: '搭配ts',
+      link: '/gulp/index'
+    }
+  ]
+}
+
+/**
+ * 源码阅读
+ */
+export function getSourceCodeSidebar() {
+  return [
+    {
+      text: '准备',
+      link: '/source-code/index'
+    }
+  ]
+}

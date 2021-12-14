@@ -152,3 +152,35 @@ let a:{} = 1
 
 type a = 1 extends {} ? 1 : 2   // 1
 ```
+
+
+
+## 判断可选属性
+
+- https://zhuanlan.zhihu.com/p/43206436
+
+`Exclude<T, undefined>` 如果 `T` 元素是 `string | undefined` 类型，排出后就是 `string`，可选类型排出后，还会有 `undefined` 类型
+```ts
+type ExcludeUndefined<T> = {[k in keyof T]: Exclude<T[k], undefined>}
+type aa = { foo: number | undefined, bar?: string }
+
+type bb = ExcludeUndefined<aa>['foo'] // number
+type bb = ExcludeUndefined<aa>['bar'] // string | undefined
+```
+
+:::tip
+原理是在开启了 **严格空检查** 的情况下，`TS` 会自动给可选属性的值类型联合上一个 `undefined` 类型。依靠判断是否联合了 `undefined` 类型来判断是否是可选属性。
+:::
+
+
+### 判断可选非严格模式
+
+::: tip
+```ts
+// cc 中的 只要必选满足 extends 条件, 就是 true
+// 1. 可选可有可无
+// 2. 可选如果有，必须类型一致
+type aa = { foo: number | undefined, bar?: string , a?: boolean}
+type cc = {foo: number | undefined, bar?: string , a: boolean} extends aa ? 1 : 3 // 1
+```
+:::
