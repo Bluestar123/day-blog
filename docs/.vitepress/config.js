@@ -26,6 +26,7 @@ module.exports = {
       {text: '前端相关', items: [
         { text: '浏览器', link: '/browser/index', activeMatch: '^/browser/' },
         { text: '源码阅读', link: '/source-code/index', activeMatch: '^/source-code/' },
+        { text: '面试题', link: '/source-code/index', activeMatch: '^/source-code/' },
       ]}
     ],
     // 侧边导航
